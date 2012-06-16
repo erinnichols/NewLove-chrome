@@ -152,6 +152,28 @@ function plansPlus () {
 			showNotification('<strong>PlansPlus preferences have been updated.</strong>');
 		});
 	}
+	
+	// **********************
+	// Poll the API ---------
+	// **********************
+	(function poll() {
+        $.ajax({ url: "/api/1/?task=autofingerlist", success: function(data) {
+            var updated = 0;
+            if(data && data.autofingerList) {
+                for(var i=0; i<data.autofingerList.length; i++) {
+                    updated += data.autofingerList[i].usernames.length;
+                }
+            }
+            if(updated > 0) {
+                // update the page title (to update the tab, indicating new plans were found)
+                if(document.title.match(/\(\d+\)/)){
+                    document.title.replace(/\(\d+\)/, '(' + updated + ')');
+                } else {
+                    document.title += ' (' + updated + ')';
+                }
+            }
+        }, dataType: "json", complete: poll, timeout: 30000 });
+    })();
 }
 
 var plansPlusToInject = document.createElement("script");
