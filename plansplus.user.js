@@ -158,7 +158,6 @@ function plansPlus () {
 	// **********************
 	function poll() {
 	    $.ajax({ url: "/api/1/?task=autofingerlist", success: function(data) {
-	        alert('Polled');
             var updated = 0;
             if(data && data.autofingerList) {
                 for(var i=0; i<data.autofingerList.length; i++) {
