@@ -156,8 +156,9 @@ function plansPlus () {
 	// **********************
 	// Poll the API ---------
 	// **********************
-	setInterval(function(){
-        $.ajax({ url: "/api/1/?task=autofingerlist", success: function(data){
+	function poll() {
+	    $.ajax({ url: "/api/1/?task=autofingerlist", success: function(data) {
+	        alert('Polled');
             var updated = 0;
             if(data && data.autofingerList) {
                 for(var i=0; i<data.autofingerList.length; i++) {
@@ -173,7 +174,9 @@ function plansPlus () {
                 }
             }
         }, dataType: "json", timeout: 10000});
-    }, 30000);
+	}
+	poll();
+	setInterval(poll, 30000);
 }
 
 var plansPlusToInject = document.createElement("script");
