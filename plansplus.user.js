@@ -137,12 +137,13 @@ function plansPlus () {
 			<div id="plansPlusPreferences">\
 				<h1 class="heading">PlansPlus Preferences</h1>\
 				<form action="#"><p>PlansPlus is tracking newlove for <input id="plansPlusUserInput" type="text" value="' + quickLoveUser + '" /> and opening links in <select id="plansPlusLinkTargetSelect"><option value="_blank">a new tab or window</option><option value="_self">the same tab or window</option></select>. Don&rsquo;t like that? Change a preference and hit the update button, and viola! And remember, <strong>1, 2, 3</strong> = autoread level, <strong>n</strong> = next plan (the bottom one) in autoread, <strong>m</strong> = most recent plan (the top one) in autoread, <strong>q</strong> = quicklove.</p>\
-				<br/>Unread plan notifications:\
+				<h3>Unread plan notifications:</h3>\
 				<input id="notify3" type="radio" name="_notifylevel" value="3" checked="checked"/> All levels \
 				<input id="notify2" type="radio" name="_notifylevel" value="2"/> Levels 1 and 2 \
-				<input id="notify1" type="radio" name="_notifylevel" value="1"/> Level 1 only \
+				<input id="notify1" type="radio" name="_notifylevel" value="1"/> Level 1 \
 				<input id="notify0" type="radio" name="_notifylevel" value="0"/> Turn off notifications \
-				<br/><input id="notificationLeft" type="radio" name="_notification" value="left" checked="checked"/> left \
+				<br/>Show notifications on the: \
+				<input id="notificationLeft" type="radio" name="_notification" value="left" checked="checked"/> left \
 				<input id="notificationRight" type="radio" name="_notification" value="right"/> right (relative to the page title)<br/>\
 				<input id="plansPlusUpdateButton" type="submit" value="Update PlansPlus Preferences" /></form>\
 			</div>\
