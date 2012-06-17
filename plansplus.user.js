@@ -136,6 +136,8 @@ function plansPlus () {
 			<div id="plansPlusPreferences">\
 				<h1 class="heading">PlansPlus Preferences</h1>\
 				<form action="#"><p>PlansPlus is tracking newlove for <input id="plansPlusUserInput" type="text" value="' + quickLoveUser + '" /> and opening links in <select id="plansPlusLinkTargetSelect"><option value="_blank">a new tab or window</option><option value="_self">the same tab or window</option></select>. Don&rsquo;t like that? Change a preference and hit the update button, and viola! And remember, <strong>1, 2, 3</strong> = autoread level, <strong>n</strong> = next plan (the bottom one) in autoread, <strong>m</strong> = most recent plan (the top one) in autoread, <strong>q</strong> = quicklove.</p>\
+				<br/>Unread plan notifications <input id="notificationLeft" type="radio" name="_notification" value="left" checked="checked"/> left\
+				<input id="notificationRight" type="radio" name="_notification" value="right"/> right (relative to the page title)<br/>\
 				<input id="plansPlusUpdateButton" type="submit" value="Update PlansPlus Preferences" /></form>\
 			</div>\
 		');
@@ -146,6 +148,8 @@ function plansPlus () {
 			window.localStorage.setItem('plansPlusUser', $('#plansPlusUserInput').val());
 			window.localStorage.setItem('linkTarget', $('#plansPlusLinkTargetSelect option:selected').val());
 			window.localStorage.setItem('inputFocused', 'false');
+			window.localStorage.setItem('notification', $('input[name="_notification"]:checked').val());
+			console.log(window.localStorage.getItem('notification'));
 			if(quickLoveUser !== window.localStorage.getItem('plansPlusUser')) {
 				window.localStorage.setItem('prefsRecentlyChanged', 'user');
 			}
@@ -156,6 +160,9 @@ function plansPlus () {
 	// **********************
 	// Poll the API ---------
 	// **********************
+	if(window.localStorage.getItem('notification') != null && window.localStorage.getItem('notification') == 'right') {
+	    $('#notificationRight').attr('checked', 'checked');
+	}
 	function poll() {
 	    $.ajax({ url: "/api/1/?task=autofingerlist", success: function(data) {
             var updated = 0;
@@ -169,7 +176,11 @@ function plansPlus () {
                 if(document.title.match(/\(\d+\)/)){
                     document.title.replace(/\(\d+\)/, '(' + updated + ')');
                 } else {
-                    document.title += ' (' + updated + ')';
+                    if(window.localStorage.getItem('notification') != null && window.localStorage.getItem('notification') == 'right') {
+                        document.title += ' (' + updated + ')';
+                    } else {
+                        document.title = '(' + updated + ') ' + document.title;
+                    }
                 }
             }
         }, dataType: "json", timeout: 10000});
