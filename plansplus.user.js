@@ -2,6 +2,7 @@
 // 1.0 - Initial release
 // 1.0.1 - Added a new keyboard shortcut: "m" goes to the plan at the top of the autoread list
 // 1.0.2 - Added keyboard shortcuts for numberpad keys as well as regular number keys
+// 1.0.3 - Added autofinger polling and notifications to tab title -- [nichols]
 // Thanks to [youngian] and [nichols] for all their work on the original Newlove script!
 // ==UserScript==
 // @name           PlansPlus
