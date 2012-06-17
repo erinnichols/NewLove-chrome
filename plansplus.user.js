@@ -149,7 +149,6 @@ function plansPlus () {
 			window.localStorage.setItem('linkTarget', $('#plansPlusLinkTargetSelect option:selected').val());
 			window.localStorage.setItem('inputFocused', 'false');
 			window.localStorage.setItem('notification', $('input[name="_notification"]:checked').val());
-			console.log(window.localStorage.getItem('notification'));
 			if(quickLoveUser !== window.localStorage.getItem('plansPlusUser')) {
 				window.localStorage.setItem('prefsRecentlyChanged', 'user');
 			}
