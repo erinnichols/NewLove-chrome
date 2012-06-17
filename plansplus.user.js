@@ -137,7 +137,12 @@ function plansPlus () {
 			<div id="plansPlusPreferences">\
 				<h1 class="heading">PlansPlus Preferences</h1>\
 				<form action="#"><p>PlansPlus is tracking newlove for <input id="plansPlusUserInput" type="text" value="' + quickLoveUser + '" /> and opening links in <select id="plansPlusLinkTargetSelect"><option value="_blank">a new tab or window</option><option value="_self">the same tab or window</option></select>. Don&rsquo;t like that? Change a preference and hit the update button, and viola! And remember, <strong>1, 2, 3</strong> = autoread level, <strong>n</strong> = next plan (the bottom one) in autoread, <strong>m</strong> = most recent plan (the top one) in autoread, <strong>q</strong> = quicklove.</p>\
-				<br/>Unread plan notifications <input id="notificationLeft" type="radio" name="_notification" value="left" checked="checked"/> left\
+				<br/>Unread plan notifications:\
+				<input id="notify3" type="radio" name="_notifylevel" value="3" checked="checked"/> All levels \
+				<input id="notify2" type="radio" name="_notifylevel" value="2"/> Levels 1 and 2 \
+				<input id="notify1" type="radio" name="_notifylevel" value="1"/> Level 1 only \
+				<input id="notify0" type="radio" name="_notifylevel" value="0"/> Turn off notifications \
+				<br/><input id="notificationLeft" type="radio" name="_notification" value="left" checked="checked"/> left \
 				<input id="notificationRight" type="radio" name="_notification" value="right"/> right (relative to the page title)<br/>\
 				<input id="plansPlusUpdateButton" type="submit" value="Update PlansPlus Preferences" /></form>\
 			</div>\
@@ -150,6 +155,7 @@ function plansPlus () {
 			window.localStorage.setItem('linkTarget', $('#plansPlusLinkTargetSelect option:selected').val());
 			window.localStorage.setItem('inputFocused', 'false');
 			window.localStorage.setItem('notification', $('input[name="_notification"]:checked').val());
+			window.localStorage.setItem('notificationLevel', $('input[name="_notifylevel"]:checked').val());
 			if(quickLoveUser !== window.localStorage.getItem('plansPlusUser')) {
 				window.localStorage.setItem('prefsRecentlyChanged', 'user');
 			}
@@ -160,15 +166,20 @@ function plansPlus () {
 	// **********************
 	// Poll the API ---------
 	// **********************
-	if(window.localStorage.getItem('notification') != null && window.localStorage.getItem('notification') == 'right') {
+	var notificationSide = window.localStorage.getItem("notification") || 'left';
+	if(notificationSide == 'right') {
 	    $('#notificationRight').attr('checked', 'checked');
 	}
+	var notificationLevel = window.localStorage.getItem("notificationLevel") || "3";
+	$('#notify' + notificationLevel).attr('checked', 'checked');
 	function poll() {
 	    $.ajax({ url: "/api/1/?task=autofingerlist", success: function(data) {
             var updated = 0;
             if(data && data.autofingerList) {
                 for(var i=0; i<data.autofingerList.length; i++) {
-                    updated += data.autofingerList[i].usernames.length;
+                    if(data.autofingerList[i].level <= Number(notificationLevel)) {
+                        updated += data.autofingerList[i].usernames.length;
+                    }
                 }
             }
             if(updated > 0) {
@@ -176,7 +187,7 @@ function plansPlus () {
                 if(document.title.match(/\(\d+\)/)){
                     document.title.replace(/\(\d+\)/, '(' + updated + ')');
                 } else {
-                    if(window.localStorage.getItem('notification') != null && window.localStorage.getItem('notification') == 'right') {
+                    if(notificationSide == 'right') {
                         document.title += ' (' + updated + ')';
                     } else {
                         document.title = '(' + updated + ') ' + document.title;
@@ -185,8 +196,10 @@ function plansPlus () {
             }
         }, dataType: "json", timeout: 10000});
 	}
-	poll();
-	setInterval(poll, 30000);
+	if(Number(notificationLevel) > 0) {
+	    poll();
+	    setInterval(poll, 30000);
+	}
 }
 
 var plansPlusToInject = document.createElement("script");
