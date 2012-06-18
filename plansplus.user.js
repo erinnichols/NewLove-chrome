@@ -186,12 +186,12 @@ function plansPlus () {
             if(updated > 0) {
                 // update the page title (to update the tab, indicating new plans were found)
                 if(document.title.match(/\(\d+\)/)){
-                    document.title.replace(/\(\d+\)/, '(' + updated + ')');
+                    $(document).attr('title', document.title.replace(/\(\d+\)/, '(' + updated + ')'));
                 } else {
                     if(notificationSide == 'right') {
-                        document.title += ' (' + updated + ')';
+                        $(document).attr('title', document.title + ' (' + updated + ')');
                     } else {
-                        document.title = '(' + updated + ') ' + document.title;
+                        $(document).attr('title', '(' + updated + ') ' + document.title);
                     }
                 }
             }
